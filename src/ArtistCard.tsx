@@ -3,9 +3,9 @@ import * as React from 'react';
 import { Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 
 import { BiLogoDeezer } from 'react-icons/bi';
-import { BiSolidShareAlt } from 'react-icons/bi';
 import { BsCollectionPlay } from 'react-icons/bs';
 import { IArtist } from './Models/IArtist';
+import { IconButton } from '@fluentui/react';
 import { Link } from 'react-router-dom';
 import { styles } from './AlbumCard';
 
@@ -16,14 +16,35 @@ const cardStyle = {
     width: 300,
     minWidth: 300,
 }
+
+const initialState = { loading: true, favourite: false };
+
+export type ReducerState = typeof initialState;
+export type ReducerAction = { type: string }
+
+const reducer = (currentState: ReducerState, action: ReducerAction): ReducerState => {
+    switch (action.type) {
+        case 'updateFavourite':
+            return { ...currentState, favourite: !currentState.favourite };
+        default:
+            return currentState;
+    }
+};
+
+const favStyle = (isFavourite: boolean) => {
+    return isFavourite ? 'red' : 'grey';
+}
+
 export const ArtistCard: React.FunctionComponent<ICardProps> = ({ artist }) => {
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+
     return (
         <Card
             sx={cardStyle}
         >
-            <a href={artist.link} target='_blank' rel='noreferrer'>
+            <Link to={`/artist/${artist.id}`} className={styles.link}>
                 <CardMedia component='img' src={artist.picture_big} />
-            </a>
+            </Link>
             <CardContent sx={{ p: 1 }} className={styles.content}>
                 <Typography variant="h6" color="text.secondary">
                     {artist.name}
@@ -42,12 +63,12 @@ export const ArtistCard: React.FunctionComponent<ICardProps> = ({ artist }) => {
                 >
                     <BsCollectionPlay />
                 </Link>
-                <Link
-                    to={artist.share}
-                    target='_blank'
-                    className={styles.link}>
-                    <BiSolidShareAlt />
-                </Link>
+                <IconButton
+                    className={styles.link}
+                    onClick={() => dispatch({ type: 'updateFavourite' })}
+                    iconProps={{ iconName: 'HeartFill', style: { color: favStyle(state.favourite) } }}
+
+                />
 
             </CardActions>
         </Card>

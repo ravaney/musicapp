@@ -21,17 +21,16 @@ const handleLinkClass = (args: { isActive: boolean, isPending: boolean }) => {
 
 export const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     return (
-        <>
-            <Stack className={"navBar"} tokens={GAP10} horizontalAlign='center'>
-                <img src='/musikiss.png' alt='logo' height='100px' />
+        <Stack className={"navBar"} tokens={GAP10} horizontalAlign='center'>
+            <img src='/musikiss.png' alt='logo' height='100px' />
+            <Stack horizontal tokens={GAP10}>
+                <NavLink to="/home" className={handleLinkClass} >Home</NavLink>
+                <NavLink to="/top100" className={handleLinkClass}>Top-100</NavLink>
+                <NavLink to="/podcasts" className={handleLinkClass}>Podcasts</NavLink>
+                <NavLink to="/feedback" className={handleLinkClass}>Feedback</NavLink>
+                <NavLink to="/currency" className={handleLinkClass}>Currency</NavLink>
+            </Stack>
 
-                <Stack horizontal tokens={GAP10}>
-                    <NavLink to="/home" className={handleLinkClass} >Home</NavLink>
-                    <NavLink to="/top100" className={handleLinkClass}>Top-100</NavLink>
-                    <NavLink to="/podcasts" className={handleLinkClass}>Podcasts</NavLink>
-                </Stack>
-
-            </Stack >
-        </>
+        </Stack >
     );
 };

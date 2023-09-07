@@ -127,18 +127,20 @@
     /* left aligh the paragraph  */
     text-align: left;
     justify-content: left;
-    padding: 20px;
+    padding: 10px;
+    width: 50%;
+    margin: 0px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .top100Header {
     background: linear-gradient(90deg, #5170FF, #FF66C4);
     padding: 10px 10px;
-    /* width: 800px; */
     width: 100%;
     position: sticky;
     top: 0;
-    z-index: 1;
-
+    z-index: 3;
 }
 
 .imageButtonStyle {
@@ -150,4 +152,11 @@
 
 .imageButtonStyle:hover {
     color: #F6F4EB;
+}
+
+.tiles {
+    width: 100px;
+    height: 150px;
+    border-radius: 5px;
+    background-color: #5170FF;
 }

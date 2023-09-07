@@ -1,11 +1,9 @@
 import * as React from 'react';
 
-import { BiLogoDeezer, BiSolidShareAlt } from 'react-icons/bi';
-import { Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-import { BsCollectionPlay } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
-import { Podcast } from './Podcast';
+import { Podcast } from './Models/Podcast';
 import { styles } from './AlbumCard';
 
 export interface IPodcastCardProps {

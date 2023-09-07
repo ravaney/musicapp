@@ -15,4 +15,5 @@ export interface IArtist {
     radio: boolean;
     tracklist: string;
     type: string;
+    favourite: boolean;
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { GAP10 } from './Constants';
 import { Outlet } from 'react-router-dom';
-import { Podcast } from './Podcast';
+import { Podcast } from './Models/Podcast';
 import { PodcastCard } from './PodcastCard';
 import { Stack } from '@fluentui/react';
 import { fetchPodcasts } from './DataService';

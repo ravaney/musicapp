@@ -1,7 +1,8 @@
 import { Album, AlbumAndTracklist, ArtistAndTrackList, Episode, IArtist, ITrack } from "./Models";
 
-import { BillboardTrack, PlaylistAndTracks } from './Models/BillboardTrack';
-import { Podcast } from "./Podcast";
+import { BillboardTop100Result } from "./Models/BillBoardTypes";
+import { PlaylistAndTracks } from './Models/BillboardTrack';
+import { Podcast } from "./Models/Podcast";
 
 const TRACKLIST_API = 'https://api.deezer.com/artist' as const
 
@@ -11,18 +12,12 @@ const ALBUM_TRACKS_API = 'https://api.deezer.com/album' as const
 
 const PODCAST_API = 'https://api.deezer.com/podcast' as const
 
+
+
 const CLIENT_ID = 'cf3c89466fc5469b9c8eb86f0ea97d3a';
 const CLIENT_SECRET = 'b0a55a2956f24bf1940584f6aca9f3b9';
 const PLAYLIST_ID = '6UeSakyzhiEt4NB3UAd6NQ';
-const BASIC_AUTH = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
-const BILLBOARD_OPTIONS = {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${BASIC_AUTH}`
-    },
-    body: 'grant_type=client_credentials'
-}
+
 
 
 export const fetchArtist = async (id: string, signal: AbortSignal): Promise<IArtist> => {
@@ -120,36 +115,50 @@ export const fetchPodcastEpisodes = async (id: string, signal: AbortSignal): Pro
     return data;
 }
 
-
-
-
-export const fetchBillboard100 = async (signal: AbortSignal): Promise<PlaylistAndTracks> => {
-    const token = await fetch('https://accounts.spotify.com/api/token', { ...BILLBOARD_OPTIONS, signal })
+export const fetchBillboardToken = async (signal: AbortSignal): Promise<string> => {
+    const BASIC_AUTH = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
+    const TOKEN_OPTIONS = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${BASIC_AUTH}`
+        },
+        body: 'grant_type=client_credentials'
+    }
+    const token = await fetch('https://accounts.spotify.com/api/token', { ...TOKEN_OPTIONS, signal })
         .then(response => response.json())
         .then(data => {
             return data.access_token;
         })
+    return token;
+}
+const fetchBillboard100fromApi = async (signal: AbortSignal): Promise<BillboardTop100Result> => {
+    const token = await fetchBillboardToken(signal);
     const response = await fetch(`https://api.spotify.com/v1/playlists/${PLAYLIST_ID}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }, signal
     })
-
     if (!response.ok) throw new Error(response.statusText);
-    const { tracks, external_urls } = await response.json();
-    console.log(tracks)
-    //extract the track from the item
-    const billboard100: BillboardTrack[] = tracks.items.map((item: any) => {
-        return item.track
-    })
-
-
-    billboard100.forEach((track: BillboardTrack) => {
-        track.image = track.album.images[0].url;
-    })
-    console.log(billboard100)
-    return { billboard100, playlistLink: external_urls.spotify };
+    const data = await response.json();
+    return data;
 }
+
+export const fetchBillboard100 = async (signal: AbortSignal): Promise<PlaylistAndTracks> => {
+    const data = await fetchBillboard100fromApi(signal);
+    console.log('data', data)
+    const response: PlaylistAndTracks = {
+        billboard100: data.tracks.items.map((item) => item.track),
+        playlistLink: data.external_urls.spotify
+    }
+
+    return response;
+}
+
+
+
+
+
 
 
 

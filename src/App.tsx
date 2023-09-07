@@ -1,15 +1,18 @@
 import './App.css';
+import '@pnp/sp/lists';
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import { Currency } from './Currency';
+import { Feedback } from './Feedback';
 import { Home } from './Home';
 import { Layout } from './Layout';
 import { PlayAlbum } from './PlayAlbum';
 import { PlayArtist } from './PlayArtist';
 import { PlayPodcasts } from './PlayPodcasts';
 import { Podcasts } from './Podcasts';
-import React from 'react';
 import { Top100 } from './Top100';
+import { initializeIcons } from '@fluentui/react';
 
 const router = createBrowserRouter([
   {
@@ -48,17 +51,24 @@ const router = createBrowserRouter([
             element: <PlayPodcasts />,
           }
         ]
-
+      },
+      {
+        path: '/feedback',
+        element: <Feedback />,
+      },
+      {
+        path: '/currency',
+        element: <Currency />,
       }
     ]
   }
 ]);
 
 function App() {
+  initializeIcons();
+
   return (
-    <div className='App'>
-      <RouterProvider router={router} />
-    </div>
+    <RouterProvider router={router} />
   );
 }
 

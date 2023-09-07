@@ -7,9 +7,9 @@ export interface ILayoutProps { }
 
 export const Layout: React.FunctionComponent<ILayoutProps> = (props) => {
     return (
-        <div>
+        <>
             <NavBar />
             <Outlet />
-        </div>
+        </>
     );
 };
